@@ -1,62 +1,16 @@
-pydocstyle - docstring style checker
-====================================
+# imperative
 
+> **Check the mood of a word**
 
-.. image:: https://travis-ci.org/PyCQA/pydocstyle.svg?branch=master
-    :target: https://travis-ci.org/PyCQA/pydocstyle
+[![Travis Status](https://travis-ci.org/epage/imperative.svg?branch=master)](https://travis-ci.org/epage/imperative)
+[![Appveyor Status](https://ci.appveyor.com/api/projects/status/uaa9voudebj944d5/branch/master?svg=true)](https://ci.appveyor.com/project/epage/imperative/branch/master)
+[![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
+![License](https://img.shields.io/crates/l/imperative.svg)
+[![Crates Status](https://img.shields.io/crates/v/imperative.svg)](https://crates.io/crates/imperative)
 
-.. image:: https://ci.appveyor.com/api/projects/status/40kkc366bmrrttca/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/Nurdok/pydocstyle/branch/master
+## License
 
-.. image:: https://readthedocs.org/projects/pydocstyle/badge/?version=latest
-    :target: https://readthedocs.org/projects/pydocstyle/?badge=latest
-    :alt: Documentation Status
+Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
-.. image:: https://img.shields.io/pypi/pyversions/pydocstyle.svg
-    :target: https://pypi.org/project/pydocstyle
-
-
-**pydocstyle** is a static analysis tool for checking compliance with Python
-docstring conventions.
-
-**pydocstyle** supports most of
-`PEP 257 <http://www.python.org/dev/peps/pep-0257/>`_ out of the box, but it
-should not be considered a reference implementation.
-
-**pydocstyle** supports Python 3.4, 3.5, 3.6 and 3.7.
-
-
-Quick Start
------------
-
-Install
-^^^^^^^
-
-.. code::
-
-    pip install pydocstyle
-
-
-Run
-^^^^
-
-.. code::
-
-    $ pydocstyle test.py
-    test.py:18 in private nested class `meta`:
-            D101: Docstring missing
-    test.py:27 in public function `get_user`:
-        D300: Use """triple double quotes""" (found '''-quotes)
-    test:75 in public function `init_database`:
-        D201: No blank lines allowed before function docstring (found 1)
-    ...
-
-
-Links
------
-
-* `Read the full documentation here <http://pydocstyle.org>`_.
-
-* `Fork pydocstyle on GitHub <http://github.com/PyCQA/pydocstyle>`_.
-
-* `PyPI project page <https://pypi.python.org/pypi/pydocstyle>`_.
+[Crates.io]: https://crates.io/crates/imperative
+[Documentation]: https://docs.rs/imperative

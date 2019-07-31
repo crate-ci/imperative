@@ -33,7 +33,6 @@ current
 currently
 custom
 data
-data
 default
 deprecated
 description
@@ -48,7 +47,6 @@ final
 formula
 function
 generic
-handler
 handler
 helper
 here

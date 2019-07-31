@@ -1,42 +1,63 @@
-"""Wordlists loaded from package data.
+use std::io::Write;
 
-We can treat them as part of the code for the imperative mood check, and
-therefore we load them at import time, rather than on-demand.
+pub const VERBS: &str = include_str!("./data/imperatives.txt");
+pub const BLACKLIST: &str = include_str!("./data/imperatives_blacklist.txt");
 
-"""
-import re
-import pkgutil
-import snowballstemmer
-from typing import Iterator
+fn parse_wordlist(raw: &str) -> impl Iterator<Item = &str> {
+    raw.lines()
+        .map(|s| s.splitn(2, "#").next().expect("always at least one").trim())
+        .filter(|s| !s.is_empty())
+}
 
+fn main() {
+    let path = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("codegen.rs");
+    let mut file = std::io::BufWriter::new(std::fs::File::create(&path).unwrap());
 
-#: Regular expression for stripping comments from the wordlists
-COMMENT_RE = re.compile(r'\s*#.*')
+    println!("rerun-if-changed=./data/imperatives.txt");
+    println!("rerun-if-changed=./data/imperatives_blacklist.txt");
 
-#: Stemmer function for stemming words in English
-stem = snowballstemmer.stemmer('english').stemWord
+    let en_stemmer = rust_stemmers::Stemmer::create(rust_stemmers::Algorithm::English);
+    let words: multimap::MultiMap<_, _> = parse_wordlist(VERBS)
+        .map(|s| (en_stemmer.stem(s).into_owned(), s))
+        .collect();
 
+    for (stem, words) in words.iter_all() {
+        write!(
+            &mut file,
+            "pub(crate) static r#{}: phf::Set<&'static str> = ",
+            stem,
+        )
+        .unwrap();
+        let mut builder = phf_codegen::Set::new();
+        for word in words {
+            builder.entry(*word);
+        }
+        builder.build(&mut file).unwrap();
+        write!(&mut file, ";\n").unwrap();
+    }
 
-def load_wordlist(name: str) -> Iterator[str]:
-    """Iterate over lines of a wordlist data file.
+    write!(
+        &mut file,
+        "pub(crate) static IMPERATIVES: phf::Map<&'static str, &phf::Set<&'static str>> = "
+    )
+    .unwrap();
+    let mut builder = phf_codegen::Map::new();
+    for stem in words.keys() {
+        let value = format!("&r#{}", stem);
+        builder.entry(stem.as_str(), &value);
+    }
+    builder.build(&mut file).unwrap();
+    write!(&mut file, ";\n").unwrap();
 
-    `name` should be the name of a package data file within the data/
-    directory.
-
-    Whitespace and #-prefixed comments are stripped from each line.
-
-    """
-    data = pkgutil.get_data('pydocstyle', 'data/' + name)
-    if data is not None:
-        text = data.decode('utf8')
-        for line in text.splitlines():
-            line = COMMENT_RE.sub('', line).strip()
-            if line:
-                yield line
-
-
-#: A dict mapping stemmed verbs to the imperative form
-IMPERATIVE_VERBS = {stem(v): v for v in load_wordlist('imperatives.txt')}
-
-#: Words that are forbidden to appear as the first word in a docstring
-IMPERATIVE_BLACKLIST = set(load_wordlist('imperatives_blacklist.txt'))
+    write!(
+        &mut file,
+        "pub(crate) static BLACKLIST: phf::Set<&'static str> = "
+    )
+    .unwrap();
+    let mut builder = phf_codegen::Set::new();
+    for word in parse_wordlist(BLACKLIST) {
+        builder.entry(word);
+    }
+    builder.build(&mut file).unwrap();
+    write!(&mut file, ";\n").unwrap();
+}
