@@ -8,6 +8,8 @@
 ![License](https://img.shields.io/crates/l/imperative.svg)
 [![Crates Status](https://img.shields.io/crates/v/imperative.svg)](https://crates.io/crates/imperative)
 
+## [Contribute](CONTRIBUTING.md)
+
 ## License
 
 Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
