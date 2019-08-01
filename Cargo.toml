@@ -3,7 +3,7 @@ name = "imperative"
 version = "0.1.0"
 authors = ["Ed Page <eopage@gmail.com>"]
 description = "Check for imperative mood in text"
-repository = "https://github.com/epage/imperative"
+repository = "https://github.com/crate-ci/imperative"
 documentation = "https://docs.rs/imperative"
 readme = "README.md"
 categories = ["text-processing"]
@@ -11,8 +11,8 @@ license = "MIT"
 edition = "2018"
 
 [badges]
-travis-ci = { repository = "epage/imperative" }
-appveyor  = { repository = "epage/imperative" }
+travis-ci = { repository = "crate-ci/imperative" }
+appveyor  = { repository = "crate-ci/imperative" }
 
 [dependencies]
 rust-stemmers = "1.1.0"
