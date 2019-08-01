@@ -10,6 +10,10 @@
 
 ## [Contribute](CONTRIBUTING.md)
 
+## Special Thanks
+
+Thank you to [pydocstyle](https://github.com/PyCQA/pydocstyle/) for the algorithm and data set.
+
 ## License
 
 Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
