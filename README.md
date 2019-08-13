@@ -2,8 +2,8 @@
 
 > **Check the mood of a word**
 
-[![Travis Status](https://travis-ci.org/crate-ci/imperative.svg?branch=master)](https://travis-ci.org/crate-ci/imperative)
-[![Appveyor Status](https://ci.appveyor.com/api/projects/status/5pr682c1d7tlwbhx/branch/master?svg=true)](https://ci.appveyor.com/project/epage/imperative/branch/master)
+[![Azure Status](https://dev.azure.com/crate-ci/crate-ci/_apis/build/status/imperative?branchName=master)](https://dev.azure.com/crate-ci/crate-ci/_build/latest?definitionId=4&branchName=master)
+[![codecov](https://codecov.io/gh/crate-ci/imperative/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/imperative)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/imperative.svg)
 [![Crates Status](https://img.shields.io/crates/v/imperative.svg)](https://crates.io/crates/imperative)

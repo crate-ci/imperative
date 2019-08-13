@@ -11,8 +11,8 @@ license = "MIT"
 edition = "2018"
 
 [badges]
-travis-ci = { repository = "crate-ci/imperative" }
-appveyor  = { repository = "crate-ci/imperative" }
+azure-devops = { project = "crate-ci", pipeline = "imperative" }
+codecov = { repository = "crate-ci/imperative" }
 
 [dependencies]
 rust-stemmers = "1.1.0"
