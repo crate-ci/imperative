@@ -10,6 +10,18 @@ stages:
   parameters:
     minrust: 1.35.0
     codecov_token: $(CODECOV_TOKEN_SECRET)
+- stage: codegen
+  displayName: Verify Code-gen
+  dependsOn: []
+  jobs:
+  - job: codegen
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+    - template: azure/install-rust.yml@templates
+    - script: |
+        cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
+      displayName: Verify Code-gen
 - stage: committed
   displayName: Lint History
   dependsOn: []

@@ -1,8 +1,5 @@
-[workspace]
-members = ["codegen"]
-
 [package]
-name = "imperative"
+name = "imperative-codegen"
 version = "1.0.0"
 authors = ["Ed Page <eopage@gmail.com>"]
 description = "Check for imperative mood in text"
@@ -12,11 +9,16 @@ readme = "README.md"
 categories = ["text-processing"]
 license = "MIT"
 edition = "2018"
+publish = false
 
 [badges]
 azure-devops = { project = "crate-ci", pipeline = "imperative" }
-codecov = { repository = "crate-ci/imperative" }
 
 [dependencies]
+phf_codegen = "0.7"
 rust-stemmers = "1.1.0"
-phf = "0.7"
+multimap = "0.6.0"
+difference = "2.0.0"
+structopt = "0.3"
+failure = "0.1"
+normalize-line-endings = "0.3.0"
