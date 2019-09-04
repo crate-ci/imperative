@@ -1,6 +1,47 @@
+use std::io::Write;
 use std::iter::FromIterator;
 
 use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+#[structopt(rename_all = "kebab-case")]
+struct Codegen {
+    #[structopt(short("-o"), long, parse(from_os_str))]
+    output: std::path::PathBuf,
+
+    #[structopt(long)]
+    check: bool,
+}
+
+impl Codegen {
+    fn write(&self, content: &str) -> Result<(), Box<dyn std::error::Error>> {
+        if self.check {
+            let content = String::from_iter(normalize_line_endings::normalized(content.chars()));
+
+            let actual = std::fs::read_to_string(&self.output)?;
+            let actual = String::from_iter(normalize_line_endings::normalized(actual.chars()));
+
+            let changeset = difference::Changeset::new(&actual, &content, "\n");
+            if changeset.distance != 0 {
+                eprintln!("{}", changeset);
+                return Err(Box::new(CodegenError));
+            } else {
+                println!("Success");
+            }
+        } else {
+            let mut file = std::io::BufWriter::new(std::fs::File::create(&self.output)?);
+            write!(file, "{}", content)?;
+        }
+
+        Ok(())
+    }
+}
+
+#[derive(Copy, Clone, Debug, derive_more::Display)]
+#[display(fmt = "Code-gen failed")]
+struct CodegenError;
+
+impl std::error::Error for CodegenError {}
 
 pub const VERBS: &str = include_str!("../data/imperatives.txt");
 pub const BLACKLIST: &str = include_str!("../data/imperatives_blacklist.txt");
@@ -85,40 +126,20 @@ fn generate<W: std::io::Write>(file: &mut W) {
 #[derive(Debug, StructOpt)]
 #[structopt(rename_all = "kebab-case")]
 struct Options {
-    #[structopt(short("-o"), long, parse(from_os_str))]
-    output: std::path::PathBuf,
-
-    #[structopt(long)]
-    check: bool,
+    #[structopt(flatten)]
+    codegen: Codegen,
 }
 
-fn run() -> Result<i32, failure::Error> {
+fn run() -> Result<i32, Box<dyn std::error::Error>> {
     let options = Options::from_args();
 
-    let mut failed = false;
+    let mut buffer = vec![];
+    generate(&mut buffer);
 
-    if options.check {
-        let actual = std::fs::read_to_string(&options.output)?;
-        let actual = String::from_iter(normalize_line_endings::normalized(actual.chars()));
+    let content = String::from_utf8(buffer)?;
+    options.codegen.write(&content)?;
 
-        let mut buffer = vec![];
-        generate(&mut buffer);
-        let expected = String::from_utf8(buffer)?;
-        let expected = String::from_iter(normalize_line_endings::normalized(expected.chars()));
-
-        let changeset = difference::Changeset::new(&actual, &expected, "\n");
-        if changeset.distance != 0 {
-            failed = true;
-            eprintln!("{}", changeset);
-        } else {
-            println!("Success");
-        }
-    } else {
-        let mut file = std::io::BufWriter::new(std::fs::File::create(&options.output)?);
-        generate(&mut file);
-    }
-
-    Ok(if failed { 1 } else { 0 })
+    Ok(0)
 }
 
 fn main() {
