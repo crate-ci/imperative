@@ -3,7 +3,7 @@ members = ["codegen"]
 
 [package]
 name = "imperative"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Ed Page <eopage@gmail.com>"]
 description = "Check for imperative mood in text"
 repository = "https://github.com/crate-ci/imperative"
