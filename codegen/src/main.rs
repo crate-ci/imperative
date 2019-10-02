@@ -1,47 +1,4 @@
-use std::io::Write;
-use std::iter::FromIterator;
-
 use structopt::StructOpt;
-
-#[derive(Debug, StructOpt)]
-#[structopt(rename_all = "kebab-case")]
-struct Codegen {
-    #[structopt(short("-o"), long, parse(from_os_str))]
-    output: std::path::PathBuf,
-
-    #[structopt(long)]
-    check: bool,
-}
-
-impl Codegen {
-    fn write(&self, content: &str) -> Result<(), Box<dyn std::error::Error>> {
-        if self.check {
-            let content = String::from_iter(normalize_line_endings::normalized(content.chars()));
-
-            let actual = std::fs::read_to_string(&self.output)?;
-            let actual = String::from_iter(normalize_line_endings::normalized(actual.chars()));
-
-            let changeset = difference::Changeset::new(&actual, &content, "\n");
-            if changeset.distance != 0 {
-                eprintln!("{}", changeset);
-                return Err(Box::new(CodegenError));
-            } else {
-                println!("Success");
-            }
-        } else {
-            let mut file = std::io::BufWriter::new(std::fs::File::create(&self.output)?);
-            write!(file, "{}", content)?;
-        }
-
-        Ok(())
-    }
-}
-
-#[derive(Copy, Clone, Debug, derive_more::Display)]
-#[display(fmt = "Code-gen failed")]
-struct CodegenError;
-
-impl std::error::Error for CodegenError {}
 
 pub const VERBS: &str = include_str!("../data/imperatives.txt");
 pub const BLACKLIST: &str = include_str!("../data/imperatives_blacklist.txt");
@@ -127,7 +84,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
 #[structopt(rename_all = "kebab-case")]
 struct Options {
     #[structopt(flatten)]
-    codegen: Codegen,
+    codegen: codegenrs::CodeGenArgs,
 }
 
 fn run() -> Result<i32, Box<dyn std::error::Error>> {
@@ -137,7 +94,7 @@ fn run() -> Result<i32, Box<dyn std::error::Error>> {
     generate(&mut buffer);
 
     let content = String::from_utf8(buffer)?;
-    options.codegen.write(&content)?;
+    options.codegen.write_str(&content)?;
 
     Ok(0)
 }
