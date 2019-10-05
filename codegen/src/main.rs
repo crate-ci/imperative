@@ -16,10 +16,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
         env!("CARGO_PKG_NAME")
     )
     .unwrap();
-    writeln!(file, "pub(crate) use hack::*;").unwrap();
-    writeln!(file, "").unwrap();
-    writeln!(file, "#[rustfmt::skip]").unwrap();
-    writeln!(file, "mod hack {{").unwrap();
+    write!(file, "\n").unwrap();
 
     let en_stemmer = rust_stemmers::Stemmer::create(rust_stemmers::Algorithm::English);
     let words: multimap::MultiMap<_, _> = parse_wordlist(VERBS)
@@ -35,8 +32,8 @@ fn generate<W: std::io::Write>(file: &mut W) {
         let words = words;
         write!(
             file,
-            "pub(crate) static r#{}: phf::Set<&'static str> = ",
-            stem,
+            "pub(crate) static {}_STEM: phf::Set<&'static str> = ",
+            stem.to_uppercase(),
         )
         .unwrap();
         let mut builder = phf_codegen::Set::new();
@@ -45,6 +42,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
         }
         builder.build(file).unwrap();
         write!(file, ";\n").unwrap();
+        write!(file, "\n").unwrap();
     }
 
     let mut stems: Vec<_> = words.keys().collect();
@@ -57,7 +55,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
     .unwrap();
     let mut builder = phf_codegen::Map::new();
     for stem in stems {
-        let value = format!("&r#{}", stem);
+        let value = format!("&{}_stem", stem).to_uppercase();
         builder.entry(stem.as_str(), &value);
     }
     builder.build(file).unwrap();
@@ -77,7 +75,6 @@ fn generate<W: std::io::Write>(file: &mut W) {
     }
     builder.build(file).unwrap();
     write!(file, ";\n").unwrap();
-    writeln!(file, "}}").unwrap();
 }
 
 #[derive(Debug, StructOpt)]
@@ -85,6 +82,8 @@ fn generate<W: std::io::Write>(file: &mut W) {
 struct Options {
     #[structopt(flatten)]
     codegen: codegenrs::CodeGenArgs,
+    #[structopt(flatten)]
+    rustmft: codegenrs::RustfmtArgs,
 }
 
 fn run() -> Result<i32, Box<dyn std::error::Error>> {
@@ -94,6 +93,7 @@ fn run() -> Result<i32, Box<dyn std::error::Error>> {
     generate(&mut buffer);
 
     let content = String::from_utf8(buffer)?;
+    let content = options.rustmft.reformat(&content)?;
     options.codegen.write_str(&content)?;
 
     Ok(0)
