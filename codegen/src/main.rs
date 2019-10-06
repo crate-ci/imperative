@@ -89,10 +89,10 @@ struct Options {
 fn run() -> Result<i32, Box<dyn std::error::Error>> {
     let options = Options::from_args();
 
-    let mut buffer = vec![];
-    generate(&mut buffer);
+    let mut content = vec![];
+    generate(&mut content);
 
-    let content = String::from_utf8(buffer)?;
+    let content = String::from_utf8(content)?;
     let content = options.rustmft.reformat(&content)?;
     options.codegen.write_str(&content)?;
 
