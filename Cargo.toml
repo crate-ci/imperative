@@ -19,4 +19,4 @@ codecov = { repository = "crate-ci/imperative" }
 
 [dependencies]
 rust-stemmers = "1.1.0"
-phf = "0.7"
+phf = "0.8"

@@ -30,7 +30,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
         let mut words = words.clone();
         words.sort();
         let words = words;
-        write!(
+        writeln!(
             file,
             "pub(crate) static {}_STEM: phf::Set<&'static str> = ",
             stem.to_uppercase(),
@@ -40,15 +40,16 @@ fn generate<W: std::io::Write>(file: &mut W) {
         for word in words {
             builder.entry(word);
         }
-        builder.build(file).unwrap();
-        write!(file, ";\n").unwrap();
-        write!(file, "\n").unwrap();
+        let codegenned = builder.build();
+        writeln!(file, "{}", codegenned).unwrap();
+        writeln!(file, ";").unwrap();
+        writeln!(file).unwrap();
     }
 
     let mut stems: Vec<_> = words.keys().collect();
     stems.sort();
     let stems = stems;
-    write!(
+    writeln!(
         file,
         "pub(crate) static IMPERATIVES: phf::Map<&'static str, &phf::Set<&'static str>> = "
     )
@@ -58,13 +59,14 @@ fn generate<W: std::io::Write>(file: &mut W) {
         let value = format!("&{}_stem", stem).to_uppercase();
         builder.entry(stem.as_str(), &value);
     }
-    builder.build(file).unwrap();
-    write!(file, ";\n").unwrap();
+    let codegenned = builder.build();
+    writeln!(file, "{}", codegenned).unwrap();
+    writeln!(file, ";").unwrap();
 
     let mut blacklist: Vec<_> = parse_wordlist(BLACKLIST).collect();
     blacklist.sort();
     let blacklist = blacklist;
-    write!(
+    writeln!(
         file,
         "pub(crate) static BLACKLIST: phf::Set<&'static str> = "
     )
@@ -73,8 +75,9 @@ fn generate<W: std::io::Write>(file: &mut W) {
     for word in blacklist {
         builder.entry(word);
     }
-    builder.build(file).unwrap();
-    write!(file, ";\n").unwrap();
+    let codegenned = builder.build();
+    writeln!(file, "{}", codegenned).unwrap();
+    writeln!(file, ";").unwrap();
 }
 
 #[derive(Debug, StructOpt)]
