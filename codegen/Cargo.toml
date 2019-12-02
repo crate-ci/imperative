@@ -17,6 +17,6 @@ azure-devops = { project = "crate-ci", pipeline = "imperative" }
 [dependencies]
 phf_codegen = "0.7"
 rust-stemmers = "1.1.0"
-multimap = "0.6.0"
+multimap = "0.8.0"
 codegenrs = "0.1"
 structopt = "0.3"
