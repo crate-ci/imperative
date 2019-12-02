@@ -15,7 +15,7 @@ publish = false
 azure-devops = { project = "crate-ci", pipeline = "imperative" }
 
 [dependencies]
-phf_codegen = "0.7"
+phf_codegen = "0.8"
 rust-stemmers = "1.1.0"
 multimap = "0.8.0"
 codegenrs = "0.1"
