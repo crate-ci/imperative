@@ -5,42 +5,36 @@ schedules:
     include:
     - master
 
-stages:
+jobs:
 - template: default.yml@templates
   parameters:
     minrust: 1.35.0
     codecov_token: $(CODECOV_TOKEN_SECRET)
-- stage: codegen
+- job: codegen
   displayName: Verify Code-gen
-  dependsOn: []
-  jobs:
-  - job: codegen
-    pool:
-      vmImage: 'ubuntu-16.04'
-    steps:
-    - template: azure/install-rust.yml@templates
-    - script: |
-        cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
-      displayName: Verify Code-gen
-- stage: committed
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - template: azure/install-rust.yml@templates
+  - script: |
+      cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
+    displayName: Verify Code-gen
+- job: "Committed"
   displayName: Lint History
-  dependsOn: []
-  jobs:
-  - job: "Committed"
-    pool:
-      vmImage: 'ubuntu-16.04'
-    steps:
-    - checkout: self
-    - template: v1/azdo-step.yml@gh-install
-      parameters:
-        git: crate-ci/committed
-        target: 'x86_64-unknown-linux-gnu'
-        to: $(Build.StagingDirectory)/tools
-    - script: |
-        echo "This project uses Conventional style, see https://www.conventionalcommits.org"
-        $(Build.StagingDirectory)/tools/committed HEAD~..HEAD^2 --no-merge-commit -vv
-      displayName: Committed
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - checkout: self
+  - template: v1/azdo-step.yml@gh-install
+    parameters:
+      git: crate-ci/committed
+      target: 'x86_64-unknown-linux-gnu'
+      to: $(Build.StagingDirectory)/tools
+  - script: |
+      echo "This project uses Conventional style, see https://www.conventionalcommits.org"
+      $(Build.StagingDirectory)/tools/committed HEAD~..HEAD^2 --no-merge-commit -vv
+    displayName: Committed
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 resources:
   repositories:
