@@ -16,6 +16,7 @@ edition = "2018"
 [badges]
 azure-devops = { project = "crate-ci", pipeline = "imperative" }
 codecov = { repository = "crate-ci/imperative" }
+maintenance = { status = "passively-maintained" }
 
 [dependencies]
 rust-stemmers = "1.1.0"

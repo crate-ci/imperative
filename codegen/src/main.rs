@@ -5,7 +5,7 @@ pub const BLACKLIST: &str = include_str!("../data/imperatives_blacklist.txt");
 
 fn parse_wordlist(raw: &str) -> impl Iterator<Item = &str> {
     raw.lines()
-        .map(|s| s.splitn(2, "#").next().expect("always at least one").trim())
+        .map(|s| s.splitn(2, '#').next().expect("always at least one").trim())
         .filter(|s| !s.is_empty())
 }
 
@@ -16,7 +16,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
         env!("CARGO_PKG_NAME")
     )
     .unwrap();
-    write!(file, "\n").unwrap();
+    writeln!(file).unwrap();
 
     let en_stemmer = rust_stemmers::Stemmer::create(rust_stemmers::Algorithm::English);
     let words: multimap::MultiMap<_, _> = parse_wordlist(VERBS)
@@ -24,11 +24,11 @@ fn generate<W: std::io::Write>(file: &mut W) {
         .collect();
 
     let mut sorted_words: Vec<_> = words.iter_all().collect();
-    sorted_words.sort();
+    sorted_words.sort_unstable();
     let sorted_words = sorted_words;
     for (stem, words) in sorted_words {
         let mut words = words.clone();
-        words.sort();
+        words.sort_unstable();
         let words = words;
         writeln!(
             file,
@@ -47,7 +47,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
     }
 
     let mut stems: Vec<_> = words.keys().collect();
-    stems.sort();
+    stems.sort_unstable();
     let stems = stems;
     writeln!(
         file,
@@ -64,7 +64,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
     writeln!(file, ";").unwrap();
 
     let mut blacklist: Vec<_> = parse_wordlist(BLACKLIST).collect();
-    blacklist.sort();
+    blacklist.sort_unstable();
     let blacklist = blacklist;
     writeln!(
         file,
