@@ -101,6 +101,22 @@ stages:
           rust: ${{ variables.minrust }}
       - script: cargo check --all --bins --examples --tests
         displayName: cargo check
+- stage: codegen
+  displayName: Verify Code-gen
+  dependsOn: ["check"]
+  jobs:
+  - job: codegen
+    pool:
+      vmImage: ${{ variables.linux_vm }}
+    steps:
+    - template: install-rust.yml@templates
+      parameters:
+        rust: ${{ variables.minrust }}
+        components:
+            - rustfmt
+    - script: |
+        cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
+      displayName: Verify typos-dict
 - stage: style
   displayName: Style checks
   dependsOn: []
