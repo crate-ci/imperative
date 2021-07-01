@@ -16,15 +16,10 @@ on:
     - "!/LICENSE-*"
   schedule:
   - cron: '9 9 9 * *'
-env:
-  MSRV: 1.44.0
-  LINUX_OS: ubuntu-latest
-  WINDOWS_OS: windows-latest
-  MAC_OS: macos-latest
 jobs:
   smoke:
     name: Quick Check
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -45,12 +40,12 @@ jobs:
     needs: smoke
     strategy:
       matrix:
-        os: ["${{ env.LINUX_OS }}", "${{ env.WINDOWS_OS }", "${{ env.MAC_OS }}"]
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
         rust: ["stable", "beta"]
         include:
-        - os: ${{ env.LINUX_OS }}
+        - os: ubuntu-latest
           rust: "nightly"
-    continue-on-error: ${{ env.rust != 'stable' }}
+    continue-on-error: ${{ matrix.rust != 'stable' }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
@@ -62,22 +57,22 @@ jobs:
         profile: minimal
     - uses: Swatinem/rust-cache@v1
     - name: Default features
-      script: cargo test --workspace
+      run: cargo test --workspace
     - name: All features
-      script: cargo test --workspace --all-features
+      run: cargo test --workspace --all-features
     - name: No-default features
-      script: cargo test --workspace --no-default-features
+      run: cargo test --workspace --no-default-features
   msrv:
-    name: "${{ format('Check MSRV: {0}', env.MSRV) }}"
+    name: "Check MSRV: 1.44.0"
     needs: smoke
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: ${{ env.MSRV }}
+        toolchain: 1.44.0  # MSRV
         profile: minimal
     - uses: Swatinem/rust-cache@v1
     - name: Default features
@@ -89,7 +84,7 @@ jobs:
   codegen:
     name: Verify Code-gen
     needs: smoke
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -100,28 +95,11 @@ jobs:
         profile: minimal
     - uses: Swatinem/rust-cache@v1
     - name: Verify typos-dict
-      script: |
-        cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
-  cargo_bloat:
-    name: Check Bloat
-    needs: smoke
-    runs-on: ${{ env.LINUX_OS }}
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-    - name: Check bloat
-      uses: orf/cargo-bloat-action@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      run: cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
   docs:
     name: Docs
     needs: smoke
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -137,7 +115,7 @@ jobs:
       run: cargo doc --no-deps --document-private-items --workspace
   rustfmt:
     name: rustfmt
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -152,14 +130,14 @@ jobs:
       run: cargo fmt --all -- --check
   clippy:
     name: clippy
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: ${{ env.MSRV }}
+        toolchain: 1.44.0  # MSRV
         profile: minimal
         components: clippy
     - uses: Swatinem/rust-cache@v1
@@ -171,7 +149,7 @@ jobs:
     name: clippy (next)
     needs: clippy
     continue-on-error: true
-    runs-on: ${{ env.LINUX_OS }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
