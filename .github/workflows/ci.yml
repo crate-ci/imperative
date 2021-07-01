@@ -1,0 +1,188 @@
+name: ci
+on:
+  pull_request:
+    paths:
+    - '**'
+    - '!/*.md'
+    - '!/docs/**'
+    - "!/LICENSE-*"
+  push:
+    branches:
+    - master
+    paths:
+    - '**'
+    - '!/*.md'
+    - '!/docs/**'
+    - "!/LICENSE-*"
+  schedule:
+  - cron: '9 9 9 * *'
+env:
+  MSRV: 1.44.0
+  LINUX_OS: ubuntu-latest
+  WINDOWS_OS: windows-latest
+  MAC_OS: macos-latest
+jobs:
+  smoke:
+    name: Quick Check
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Default features
+      run: cargo check --workspace --all-targets
+    - name: All features
+      run: cargo check --workspace --all-targets --all-features
+    - name: No-default features
+      run: cargo check --workspace --all-targets --no-default-features
+  test:
+    name: Test
+    needs: smoke
+    strategy:
+      matrix:
+        os: ["${{ env.LINUX_OS }}", "${{ env.WINDOWS_OS }", "${{ env.MAC_OS }}"]
+        rust: ["stable", "beta"]
+        include:
+        - os: ${{ env.LINUX_OS }}
+          rust: "nightly"
+    continue-on-error: ${{ env.rust != 'stable' }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust }}
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Default features
+      script: cargo test --workspace
+    - name: All features
+      script: cargo test --workspace --all-features
+    - name: No-default features
+      script: cargo test --workspace --no-default-features
+  msrv:
+    name: "${{ format('Check MSRV: {0}', env.MSRV) }}"
+    needs: smoke
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ env.MSRV }}
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Default features
+      run: cargo check --workspace --all-targets
+    - name: All features
+      run: cargo check --workspace --all-targets --all-features
+    - name: No-default features
+      run: cargo check --workspace --all-targets --no-default-features
+  codegen:
+    name: Verify Code-gen
+    needs: smoke
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Verify typos-dict
+      script: |
+        cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
+  cargo_bloat:
+    name: Check Bloat
+    needs: smoke
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+    - name: Check bloat
+      uses: orf/cargo-bloat-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+  docs:
+    name: Docs
+    needs: smoke
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Check documentation
+      env:
+        RUSTDOCFLAGS: -D warnings
+      run: cargo doc --no-deps --document-private-items --workspace
+  rustfmt:
+    name: rustfmt
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        components: rustfmt
+    - uses: Swatinem/rust-cache@v1
+    - name: Check formatting
+      run: cargo fmt --all -- --check
+  clippy:
+    name: clippy
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ env.MSRV }}
+        profile: minimal
+        components: clippy
+    - uses: Swatinem/rust-cache@v1
+    - uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --workspace --all-features --all-targets -- -D warnings
+  clippy-next:
+    name: clippy (next)
+    needs: clippy
+    continue-on-error: true
+    runs-on: ${{ env.LINUX_OS }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        components: clippy
+    - uses: Swatinem/rust-cache@v1
+    - uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --workspace --all-features --all-targets -- -D warnings
