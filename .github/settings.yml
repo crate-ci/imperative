@@ -2,6 +2,8 @@
 
 repository:
   description: Check the mood of a word
+  homepage: docs.rs/imperative
+  topics: rust
   has_issues: true
   has_projects: false
   has_wiki: false
@@ -11,6 +13,9 @@ repository:
   allow_squash_merge: true
   allow_merge_commit: true
   allow_rebase_merge: true
+
+  # Manual: allow_auto_merge: true, see https://github.com/probot/settings/issues/402
+  # Manual: auto_delete_branch: true, see https://github.com/probot/settings/issues/466
 
 labels:
   # Type
@@ -37,7 +42,7 @@ branches:
         required_approving_review_count: 1
         dismiss_stale_reviews: false
         require_code_owner_reviews: false
-      # Doesn't yet support 'require conversation reslution', see https://github.com/probot/settings/issues/458
+      # Manual: required_conversation_resolution: true, see https://github.com/probot/settings/issues/458
       required_status_checks:
         # Required. Require branches to be up to date before merging.
         strict: true
