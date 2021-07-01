@@ -1,0 +1,32 @@
+name: codegen
+on:
+  pull_request:
+    paths:
+    - 'Cargo.lock'
+    - 'codegen/**'
+    - '**/*codegen.rs'
+  push:
+    branches:
+    - master
+    paths:
+    - 'Cargo.lock'
+    - 'codegen/**'
+    - '**/*codegen.rs'
+  schedule:
+  - cron: '9 9 9 * *'
+jobs:
+  codegen:
+    name: Verify Code-gen
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+    - uses: Swatinem/rust-cache@v1
+    - name: Verify typos-dict
+      run: cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
