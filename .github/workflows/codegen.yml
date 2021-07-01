@@ -28,5 +28,5 @@ jobs:
         profile: minimal
         override: true
     - uses: Swatinem/rust-cache@v1
-    - name: Verify typos-dict
+    - name: Verify wordlist
       run: cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
