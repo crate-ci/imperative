@@ -27,6 +27,7 @@ jobs:
         toolchain: 1.44.0  # MSRV
         profile: minimal
         override: true
+        components: rustfmt
     - uses: Swatinem/rust-cache@v1
     - name: Verify wordlist
       run: cargo run --package imperative-codegen -- --output src/wordlist_codegen.rs --check
