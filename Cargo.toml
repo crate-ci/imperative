@@ -28,4 +28,4 @@ pre-release-replacements = [
 
 [dependencies]
 rust-stemmers = "1.1.0"
-phf = "0.9"
+phf = "0.10"
