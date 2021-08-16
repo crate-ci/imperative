@@ -4,19 +4,27 @@ members = ["codegen"]
 [package]
 name = "imperative"
 version = "1.0.2"
-authors = ["Ed Page <eopage@gmail.com>"]
 description = "Check for imperative mood in text"
+authors = ["Ed Page <eopage@gmail.com>"]
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/crate-ci/imperative"
 documentation = "https://docs.rs/imperative"
 readme = "README.md"
 categories = ["text-processing"]
-license = "MIT"
 edition = "2018"
 
 [badges]
-azure-devops = { project = "crate-ci", pipeline = "imperative" }
 codecov = { repository = "crate-ci/imperative" }
 maintenance = { status = "passively-maintained" }
+
+[package.metadata.release]
+pre-release-replacements = [
+  {file="CHANGELOG.md", search="Unreleased", replace="{{version}}", min=1},
+  {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}", exactly=1},
+  {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}", min=1},
+  {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", exactly=1},
+  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/crate-ci/imperative/compare/{{tag_name}}...HEAD", exactly=1},
+]
 
 [dependencies]
 rust-stemmers = "1.1.0"
