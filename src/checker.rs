@@ -15,10 +15,10 @@ impl Mood {
             return Some(false);
         }
 
-        let stem = self.en_stemmer.stem(&word);
+        let stem = self.en_stemmer.stem(word);
         let imperative_forms = map_lookup(&crate::wordlist_codegen::IMPERATIVES, stem.as_ref())?;
         println!("{} -> {}", word, stem);
-        Some(set_contains(&imperative_forms, word))
+        Some(set_contains(imperative_forms, word))
     }
 }
 
@@ -56,7 +56,7 @@ fn set_contains(set: &'static phf::Set<&'static str>, key: &str) -> bool {
     // See https://github.com/rust-lang/rust/issues/28853#issuecomment-158735548
     unsafe {
         let key = ::std::mem::transmute::<_, &'static str>(key);
-        set.contains(&key)
+        set.contains(key)
     }
 }
 
