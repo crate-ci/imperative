@@ -1,4 +1,4 @@
-use structopt::StructOpt;
+use clap::Parser;
 
 pub const VERBS: &str = include_str!("../data/imperatives.txt");
 pub const BLACKLIST: &str = include_str!("../data/imperatives_blacklist.txt");
@@ -80,17 +80,17 @@ fn generate<W: std::io::Write>(file: &mut W) {
     writeln!(file, ";").unwrap();
 }
 
-#[derive(Debug, StructOpt)]
-#[structopt(rename_all = "kebab-case")]
+#[derive(Debug, Parser)]
+#[clap(rename_all = "kebab-case")]
 struct Options {
-    #[structopt(flatten)]
+    #[clap(flatten)]
     codegen: codegenrs::CodeGenArgs,
-    #[structopt(flatten)]
+    #[clap(flatten)]
     rustmft: codegenrs::RustfmtArgs,
 }
 
 fn run() -> Result<i32, Box<dyn std::error::Error>> {
-    let options = Options::from_args();
+    let options = Options::parse();
 
     let mut content = vec![];
     generate(&mut content);
