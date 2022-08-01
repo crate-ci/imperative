@@ -1,5 +1,4 @@
 [workspace]
-members = ["codegen"]
 
 [package]
 name = "imperative"
@@ -32,3 +31,10 @@ pre-release-replacements = [
 [dependencies]
 rust-stemmers = "1.1.0"
 phf = "0.10"
+
+[dev-dependencies]
+snapbox = { version = "0.2.10", features = ["path"] }
+phf_codegen = "0.10"
+rust-stemmers = "1.1.0"
+multimap = "0.8.0"
+codegenrs = "2.0"
