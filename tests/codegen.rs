@@ -79,6 +79,6 @@ fn generate<W: std::io::Write>(file: &mut W) {
 
 fn parse_wordlist(raw: &str) -> impl Iterator<Item = &str> {
     raw.lines()
-        .map(|s| s.splitn(2, '#').next().expect("always at least one").trim())
+        .map(|s| s.split('#').next().expect("always at least one").trim())
         .filter(|s| !s.is_empty())
 }
