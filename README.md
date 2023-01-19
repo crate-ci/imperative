@@ -13,6 +13,15 @@
 
 Thank you to [pydocstyle](https://github.com/PyCQA/pydocstyle/) for the algorithm and data set.
 
+### Regenerating the wordlist
+
+If you change `assets/imperatives.txt` or `assets/imperatives_blacklist.txt`, run
+
+```bash
+env SNAPSHOTS=overwrite cargo test
+```
+to regenerate the `wordlist_codegen.rs` file while running tests.
+
 ## License
 
 Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
