@@ -1,4 +1,9 @@
 [workspace]
+members = [
+  "imperative_dev",
+]
+default-members = [".", "imperative_dev"]
+
 
 [package]
 name = "imperative"
@@ -32,10 +37,3 @@ pre-release-replacements = [
 [dependencies]
 rust-stemmers = "1.2.0"
 phf = "0.11"
-
-[dev-dependencies]
-snapbox = { version = "0.4.3", features = ["path"] }
-phf_codegen = "0.11"
-rust-stemmers = "1.2.0"
-multimap = "0.8.3"
-codegenrs = "2.0"

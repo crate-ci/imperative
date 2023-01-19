@@ -9,6 +9,10 @@
 
 ## [Contribute](CONTRIBUTING.md)
 
+### Regenerating the wordlist
+
+Regenerate the `src/wordlist_codegen.rs` file by running `cargo dev generate`.
+
 ## Special Thanks
 
 Thank you to [pydocstyle](https://github.com/PyCQA/pydocstyle/) for the algorithm and data set.
