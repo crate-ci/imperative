@@ -17,7 +17,6 @@ impl Mood {
 
         let stem = self.en_stemmer.stem(word);
         let imperative_forms = map_lookup(&crate::wordlist_codegen::IMPERATIVES, stem.as_ref())?;
-        println!("{} -> {}", word, stem);
         Some(set_contains(imperative_forms, word))
     }
 }
