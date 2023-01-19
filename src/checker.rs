@@ -11,13 +11,13 @@ impl Mood {
 
     /// **Note:** that the input is expected to be all lowercase (if that is applicable).
     pub fn is_imperative(&self, word: &str) -> Option<bool> {
-        if set_contains(&crate::wordlist_codegen::BLACKLIST, word) {
+        if crate::wordlist_codegen::BLACKLIST.contains(word) {
             return Some(false);
         }
 
         let stem = self.en_stemmer.stem(word);
-        let imperative_forms = map_lookup(&crate::wordlist_codegen::IMPERATIVES, stem.as_ref())?;
-        Some(set_contains(imperative_forms, word))
+        let imperative_forms = crate::wordlist_codegen::IMPERATIVES.get(stem.as_ref())?;
+        Some(imperative_forms.contains(word))
     }
 }
 
@@ -30,32 +30,6 @@ impl Clone for Mood {
 impl Default for Mood {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-fn map_lookup<V: Clone>(map: &'static phf::Map<&'static str, V>, key: &str) -> Option<V> {
-    // This transmute should be safe as `get` will not store the reference with
-    // the expanded lifetime. This is due to `Borrow` being overly strict and
-    // can't have an impl for `&'static str` to `Borrow<&'a str>`.
-    //
-    //
-    // See https://github.com/rust-lang/rust/issues/28853#issuecomment-158735548
-    unsafe {
-        let key = ::std::mem::transmute::<_, &'static str>(key);
-        map.get(key).cloned()
-    }
-}
-
-fn set_contains(set: &'static phf::Set<&'static str>, key: &str) -> bool {
-    // This transmute should be safe as `get` will not store the reference with
-    // the expanded lifetime. This is due to `Borrow` being overly strict and
-    // can't have an impl for `&'static str` to `Borrow<&'a str>`.
-    //
-    //
-    // See https://github.com/rust-lang/rust/issues/28853#issuecomment-158735548
-    unsafe {
-        let key = ::std::mem::transmute::<_, &'static str>(key);
-        set.contains(key)
     }
 }
 
