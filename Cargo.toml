@@ -37,5 +37,5 @@ phf = "0.11"
 snapbox = { version = "0.4.7", features = ["path"] }
 phf_codegen = "0.11"
 rust-stemmers = "1.2.0"
-multimap = "0.8.3"
+multimap = "0.9.0"
 codegenrs = "2.0"
