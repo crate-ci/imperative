@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Report mood for `package`
+- Correctly report `added` is not imperative
+
 ## [1.0.4] - 2023-01-19
 
 ### Internal Changes
