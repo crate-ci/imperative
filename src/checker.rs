@@ -46,6 +46,9 @@ mod test {
             ("returns", Some(false)),
             ("return", Some(true)),
             ("constructor", Some(false)),
+            ("adds", Some(false)),
+            ("add", Some(true)),
+            ("added", None), // stem is "ad"
         ];
         for (word, expected) in cases.iter() {
             println!("Checking {}", word);
