@@ -15,7 +15,10 @@ impl Mood {
             return Some(false);
         }
 
-        let stem = self.en_stemmer.stem(word);
+        let stem = match word {
+            "added" => "add".into(),
+            _ => self.en_stemmer.stem(word),
+        };
         let imperative_forms = crate::wordlist_codegen::IMPERATIVES.get(stem.as_ref())?;
         Some(imperative_forms.contains(word))
     }
@@ -48,7 +51,7 @@ mod test {
             ("constructor", Some(false)),
             ("adds", Some(false)),
             ("add", Some(true)),
-            ("added", None), // stem is "ad"
+            ("added", Some(false)),
         ];
         for (word, expected) in cases.iter() {
             println!("Checking {}", word);
