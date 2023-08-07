@@ -18,7 +18,7 @@ include = [
 
 [package]
 name = "imperative"
-version = "1.0.4"
+version = "1.0.5"
 description = "Check for imperative mood in text"
 authors = ["Ed Page <eopage@gmail.com>"]
 repository = "https://github.com/crate-ci/imperative"
