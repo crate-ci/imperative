@@ -5,7 +5,8 @@
 [![codecov](https://codecov.io/gh/crate-ci/imperative/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/imperative)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/imperative.svg)
-[![Crates Status](https://img.shields.io/crates/v/imperative.svg)](https://crates.io/crates/imperative)
+[![Crates Status](https://img.shields.io/crates/v/imperative.svg)][Crates.io]
+
 
 ## [Contribute](CONTRIBUTING.md)
 
