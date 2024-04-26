@@ -1,5 +1,5 @@
-pub const VERBS: &str = include_str!("../assets/imperatives.txt");
-pub const BLACKLIST: &str = include_str!("../assets/imperatives_blacklist.txt");
+pub(crate) const VERBS: &str = include_str!("../../assets/imperatives.txt");
+pub(crate) const BLACKLIST: &str = include_str!("../../assets/imperatives_blacklist.txt");
 
 #[test]
 fn codegen() {
@@ -8,7 +8,7 @@ fn codegen() {
 
     let content = String::from_utf8(content).unwrap();
     let content = codegenrs::rustfmt(content, None).unwrap();
-    snapbox::assert_eq(snapbox::file!["../src/wordlist_codegen.rs"], content);
+    snapbox::assert_eq(snapbox::file!["../../src/wordlist_codegen.rs"], content);
 }
 
 fn generate<W: std::io::Write>(file: &mut W) {
