@@ -8,7 +8,10 @@ fn codegen() {
 
     let content = String::from_utf8(content).unwrap();
     let content = codegenrs::rustfmt(content, None).unwrap();
-    snapbox::assert_eq(snapbox::file!["../../src/wordlist_codegen.rs"], content);
+    snapbox::assert_data_eq!(
+        content,
+        snapbox::file!["../../src/wordlist_codegen.rs"].raw()
+    );
 }
 
 fn generate<W: std::io::Write>(file: &mut W) {
