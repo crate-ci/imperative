@@ -88,7 +88,7 @@ zero_sized_map_values = "warn"
 
 [package]
 name = "imperative"
-version = "1.0.5"
+version = "1.0.6"
 description = "Check for imperative mood in text"
 authors = ["Ed Page <eopage@gmail.com>"]
 repository = "https://github.com/crate-ci/imperative"
