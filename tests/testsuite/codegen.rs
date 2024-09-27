@@ -46,7 +46,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
             builder.entry(word);
         }
         let codegenned = builder.build();
-        writeln!(file, "{}", codegenned).unwrap();
+        writeln!(file, "{codegenned}").unwrap();
         writeln!(file, ";").unwrap();
         writeln!(file).unwrap();
     }
@@ -61,11 +61,11 @@ fn generate<W: std::io::Write>(file: &mut W) {
     .unwrap();
     let mut builder = phf_codegen::Map::new();
     for stem in stems {
-        let value = format!("&{}_stem", stem).to_uppercase();
+        let value = format!("&{stem}_stem").to_uppercase();
         builder.entry(stem.as_str(), &value);
     }
     let codegenned = builder.build();
-    writeln!(file, "{}", codegenned).unwrap();
+    writeln!(file, "{codegenned}").unwrap();
     writeln!(file, ";").unwrap();
 
     let mut blacklist: Vec<_> = parse_wordlist(BLACKLIST).collect();
@@ -81,7 +81,7 @@ fn generate<W: std::io::Write>(file: &mut W) {
         builder.entry(word);
     }
     let codegenned = builder.build();
-    writeln!(file, "{}", codegenned).unwrap();
+    writeln!(file, "{codegenned}").unwrap();
     writeln!(file, ";").unwrap();
 }
 
