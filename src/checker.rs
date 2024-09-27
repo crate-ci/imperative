@@ -54,7 +54,7 @@ mod test {
             ("added", Some(false)),
         ];
         for (word, expected) in cases.iter() {
-            println!("Checking {}", word);
+            println!("Checking {word}");
             assert_eq!(mood.is_imperative(word), expected.clone());
         }
     }
