@@ -54,15 +54,21 @@ fn generate<W: std::io::Write>(file: &mut W) {
     let mut stems: Vec<_> = words.keys().collect();
     stems.sort_unstable();
     let stems = stems;
+    let formatted_stems = stems
+        .into_iter()
+        .map(|stem| {
+            let value = format!("&{stem}_stem").to_uppercase();
+            (stem, value)
+        })
+        .collect::<Vec<_>>();
     writeln!(
         file,
         "pub(crate) static IMPERATIVES: phf::Map<&'static str, &phf::Set<&'static str>> = "
     )
     .unwrap();
     let mut builder = phf_codegen::Map::new();
-    for stem in stems {
-        let value = format!("&{stem}_stem").to_uppercase();
-        builder.entry(stem.as_str(), &value);
+    for (stem, value) in &formatted_stems {
+        builder.entry(stem.as_str(), value);
     }
     let codegenned = builder.build();
     writeln!(file, "{codegenned}").unwrap();
