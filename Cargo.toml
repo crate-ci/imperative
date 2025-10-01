@@ -124,15 +124,15 @@ pre-release-replacements = [
 
 [dependencies]
 rust-stemmers = "1.2.0"
-phf = "0.12"
+phf = "0.13"
 
 [dev-dependencies]
-snapbox = "0.6.5"
-phf_codegen = "0.12"
+snapbox = "0.6.21"
+phf_codegen = "0.13"
 rust-stemmers = "1.2.0"
-multimap = "0.10.0"
+multimap = "0.10.1"
 codegenrs = "3.0"
-automod = "1.0.14"
+automod = "1.0.15"
 
 [lints]
 workspace = true
