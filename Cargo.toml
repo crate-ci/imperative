@@ -124,7 +124,7 @@ pre-release-replacements = [
 
 [dependencies]
 rust-stemmers = "1.2.0"
-phf = "0.12"
+phf = "0.13"
 
 [dev-dependencies]
 snapbox = "0.6.5"
