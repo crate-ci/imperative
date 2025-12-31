@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Allow `default` as a verb
+
 ## [1.0.6] - 2024-07-25
 
 ### Compatibility
