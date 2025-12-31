@@ -33,7 +33,6 @@ current
 currently
 custom
 data
-default
 deprecated
 description
 dict
