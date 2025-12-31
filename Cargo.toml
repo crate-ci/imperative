@@ -97,7 +97,7 @@ lto = true
 
 [package]
 name = "imperative"
-version = "1.0.6"
+version = "1.0.7"
 description = "Check for imperative mood in text"
 authors = ["Ed Page <eopage@gmail.com>"]
 documentation = "https://docs.rs/imperative"

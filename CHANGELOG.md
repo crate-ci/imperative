@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.7] - 2025-12-31
+
 ### Fixes
 
 - Allow `default` as a verb
@@ -44,7 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [1.0.0] - 2019-08-01
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/imperative/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/crate-ci/imperative/compare/v1.0.7...HEAD
+[1.0.7]: https://github.com/crate-ci/imperative/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/crate-ci/imperative/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/crate-ci/imperative/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/crate-ci/imperative/compare/v1.0.3...v1.0.4
