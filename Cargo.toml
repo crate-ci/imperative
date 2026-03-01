@@ -126,7 +126,7 @@ rust-stemmers = "1.2.0"
 phf = "0.13"
 
 [dev-dependencies]
-snapbox = "0.6.21"
+snapbox = "1.0.0"
 phf_codegen = "0.13"
 rust-stemmers = "1.2.0"
 multimap = "0.10.1"
