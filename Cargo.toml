@@ -126,12 +126,12 @@ rust-stemmers = "1.2.0"
 phf = "0.13"
 
 [dev-dependencies]
-snapbox = "0.6.21"
+snapbox = "0.6.24"
 phf_codegen = "0.13"
 rust-stemmers = "1.2.0"
 multimap = "0.10.1"
 codegenrs = "3.0"
-automod = "1.0.15"
+automod = "1.0.16"
 
 [lints]
 workspace = true
