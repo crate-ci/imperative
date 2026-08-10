@@ -61,7 +61,6 @@ new
 number
 optional
 placeholder
-reference
 result
 same
 schema
