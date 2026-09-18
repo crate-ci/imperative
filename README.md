@@ -2,8 +2,8 @@
 
 > **Check the mood of a word**
 
-[![codecov](https://codecov.io/gh/crate-ci/imperative/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/imperative)
-[![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
+[![codecov](https://codecov.io/gh/crate-ci/imperative/branch/main/graph/badge.svg)](https://codecov.io/gh/crate-ci/imperative)
+[![Documentation](https://img.shields.io/badge/docs-main-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/imperative.svg)
 [![Crates Status](https://img.shields.io/crates/v/imperative.svg)][Crates.io]
 
